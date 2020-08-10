@@ -1,0 +1,50 @@
+﻿<div class="top-row pl-4 navbar navbar-light">
+    <a class="navbar-brand title" style="justify-content:center;color:aliceblue">MENU</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column flex-md-fill flex-lg-shrink-1">
+        <li class="nav-item px-3" style="font-family:'Segoe UI'">
+            <NavLink class="nav-link" href="index" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Today's Update
+            </NavLink>
+        </li>
+        <li class="nav-item px-3" style="font-family:'Segoe UI'">
+            <NavLink class="nav-link" href="localInfo" Match="NavLinkMatch.All">
+                <span class="oi oi-dashboard" aria-hidden="true"></span> Total Affected(TR)
+            </NavLink>
+        </li>
+        <li class="nav-item px-3" style="font-family:'Segoe UI'">
+            <NavLink class="nav-link" href="worldTotal" Match="NavLinkMatch.All">
+                <span class="oi oi-dashboard" aria-hidden="true"></span> Total Affected(World)
+            </NavLink>
+        </li>
+        <li class="nav-item px-3" style="font-family:'Segoe UI'">
+            <NavLink class="nav-link" href="searchCountry" Match="NavLinkMatch.All">
+                <span class="oi oi-map" aria-hidden="true"></span> Search Country
+            </NavLink>
+        </li>
+        <li class="nav-item px-3" style="font-family:'Segoe UI'">
+            <NavLink class="nav-link" href="getMapping" Match="NavLinkMatch.All">
+                <span class="oi oi-map" aria-hidden="true"></span> Map
+            </NavLink>
+        </li>
+    </ul>
+
+
+</div>
+
+@code { 
+    
+    private bool collapseNavMenu = true;
+
+            private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+            private void ToggleNavMenu()
+            {
+                collapseNavMenu = !collapseNavMenu;
+            } 
+    }

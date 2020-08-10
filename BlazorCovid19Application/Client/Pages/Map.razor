@@ -1,0 +1,31 @@
+﻿@page "/getMapping"
+
+@using BlazorCovid19Application.Client.Services;
+@using BlazorCovid19Application.Shared;
+@inject IJSRuntime IJSRuntime;
+
+    <style type="text/css">
+        html, body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            height: 100%;
+            background: radial-gradient(ellipse at bottom, #ffe6e6 0%, #ffe6e6 100%);
+            overflow: hidden;
+        }
+    </style>
+
+    
+    <h1>Covid19 Map</h1>
+    <br />
+    <button class="btn btn-primary" @onclick="GenerateMap">Generate Map</button>
+    <br />
+    <br />
+    <div id="chartdiv"></div>
+
+    @code {
+
+        private async Task GenerateMap()
+        {
+            await IJSRuntime.InvokeVoidAsync("GenerateMap");
+        }
+
+    }

@@ -1,0 +1,303 @@
+﻿@page "/"
+@page "/index"
+
+@using BlazorCovid19Application.Client.Services
+@using BlazorCovid19Application.Shared
+
+
+<div class="row" style="justify-content:center">
+    <div class="col-md-6">
+        <h1 style="color:aliceblue;" align="center"> TODAY RESULT FOR COVID-19 </h1>
+        <p style="color:aliceblue" align="center"> @DateTime.DayOfWeek   |UTC(3+): @DateTime.Now</p>
+
+        <hr style="background-color: aliceblue" />
+    </div>
+</div>
+
+<div class="row" style="justify-content:center">
+    <div class="col-md-6">
+        <h1 style="color:darkturquoise;" align="center"> Total Confirmed: @worldWideInfoDTO.Cases  </h1>
+        <hr style="background-color:aliceblue" />
+        <br />
+    </div>
+</div>
+
+
+<div class="row" style="justify-content:center">
+    <div class="col-md-6">
+        <h1 style="color:forestgreen;" align="center"> Global Recovered: @worldWideInfoDTO.Recovered  </h1>
+        <hr style="background-color:aliceblue" />
+        <br />
+    </div>
+</div>
+
+<div class="row" style="justify-content:center">
+    <div class="col-md-6">
+        <h1 style="color:darkred;" align="center"> Global Deaths: @worldWideInfoDTO.Deaths  </h1>
+        <hr style="background-color:aliceblue" />
+        <br />
+    </div>
+</div>
+
+
+
+<div class="row" style="justify-content:center">
+    <div class="col-md-6">
+        <h1 style="color:aliceblue;" align="center"> Select Countries For Result  </h1>
+        <hr style="background-color:aliceblue" />
+        <br />
+    </div>
+</div>
+
+<div class="row" style="justify-content:center">
+    <div class="col-md-6">
+        <div class="input-group">
+            <DxTagBox Data="@CovidResultData"
+                      TextFieldName="Country"
+                      FilteringMode="@FilteringMode"
+                      ClearButtonDisplayMode="@DataEditorClearButtonDisplayMode.Auto"
+                      @bind-SelectedItems="@SelectedCountries"
+                      NullText="Select Country/Countries"
+                      SizeMode="@SizeMode">
+            </DxTagBox>
+            <br />
+            <DxButton RenderStyle="@ButtonRenderStyle.Dark" RenderStyleMode="@ButtonRenderStyleMode.Contained"
+                      Text="Get Results" @onclick="@ButtonClicked" SizeMode="@SizeMode.Medium" />
+        </div>
+        <hr style="background-color:aliceblue" />
+        <br />
+    </div>
+</div>
+
+@if (CovidResultData != null)
+{
+
+
+    @if (isButtonClicked)
+    {
+
+
+
+        @if (covidModel != null && isPopUp)
+        {
+            <br />
+
+            <div class="row" style="justify-content:center">
+                <div class="col-md-6">
+                    <p style="color:aliceblue;" align="center">(Could be delay to update)</p>
+
+
+                </div>
+            </div>
+            <br />
+            <div class="row" style="justify-content:center">
+                <table class="table table-bordered table-hover" style="width:initial">
+                    <tbody>
+
+                        <tr>
+                            <td> <h1 class="title">Today's Cases</h1> </td>
+                            <td> <h1 class="title">@covidModel.TodayCases</h1></td>
+                        </tr>
+                        <tr>
+                            <td><h1 class="title">Today's Deaths</h1> </td>
+                            <td><h1 class="title">@covidModel.TodayDeaths</h1></td>
+                        </tr>
+                        <tr>
+                            <td><h1 class="title">Today's Recovered</h1></td>
+                            <td><h1 class="title">@covidModel.TodayRecovered</h1></td>
+                        </tr>
+                        
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <hr style="background-color:aliceblue" />
+            <br />
+
+
+
+            <div class="row" style="justify-content:center">
+                <div class="col-md-6">
+                    <br />
+                    <p style="color:aliceblue;" align="center">(Number of cases, recovered and deaths for each selected country.)</p>
+
+                    <DxChart Data="@CovidResultData">
+                        <DxChartLineSeries Name="TodayCases" Filter="@((Covid19InfoDTO s) => SelectedCountries.Select(x=>x.Country).Contains(s.Country))"
+                                           ArgumentField="@(s => s.Country)" ValueField="@(s => Convert.ToInt32(s.TodayCases))" />
+                        <DxChartLineSeries Name="TodayRecovered" Filter="@((Covid19InfoDTO s) => SelectedCountries.Select(x=>x.Country).Contains(s.Country))"
+                                           ArgumentField="@(s => s.Country)" ValueField="@(s => Convert.ToInt32(s.TodayRecovered))" />
+                        <DxChartLineSeries Name="TodayDeaths" Filter="@((Covid19InfoDTO s) => SelectedCountries.Select(x=>x.Country).Contains(s.Country))"
+                                           ArgumentField="@(s => s.Country)" ValueField="@(s => Convert.ToInt32(s.TodayDeaths))" />
+                        <DxChartLegend Position="RelativePosition.Outside" HorizontalAlignment="HorizontalAlignment.Right" />
+                    </DxChart>
+
+                    <br />
+                </div>
+            </div>
+            <br />
+
+
+            <div class="row" style="justify-content:center">
+                <div class="col-md-6">
+                    <p style="color:aliceblue;" align="center">(Number of cases, recovered and deaths for each selected country.)</p>
+
+
+                    <DxChart Data="@CovidResultData">
+
+
+                        <DxChartBarSeries Name="TodayCases" Filter="@((Covid19InfoDTO s) => SelectedCountries.Select(x=>x.Country).Contains(s.Country))"
+                                          ArgumentField="@(s => s.Country)" ValueField="@(s => Convert.ToInt32(s.TodayCases))" />
+                        <DxChartBarSeries Name="TodayRecovered" Filter="@((Covid19InfoDTO s) => SelectedCountries.Select(x=>x.Country).Contains(s.Country))"
+                                          ArgumentField="@(s => s.Country)" ValueField="@(s => Convert.ToInt32(s.TodayRecovered))" />
+                        <DxChartBarSeries Name="TodayDeaths" Filter="@((Covid19InfoDTO s) => SelectedCountries.Select(x=>x.Country).Contains(s.Country))"
+                                          ArgumentField="@(s => s.Country)" ValueField="@(s => Convert.ToInt32(s.TodayDeaths))" />
+
+                    </DxChart>
+
+                    <br />
+                </div>
+            </div>
+
+
+
+            <div class="row" style="justify-content:center">
+                <div class="col-md-6">
+                    <br />
+                    <p style="color:aliceblue;" align="center">(Total of cases, recovered and deaths for each selected country.)</p>
+
+                    <DxChart Data="@covidModelForChart">
+
+                        <DxChartBarSeries Name="TotalCase" Filter="@((Covid19InfoDTO s) => s.countries == string.Join(",", selectedCountries.Select(x => x.Country)))"
+                                          ArgumentField="@(s => s.countries)" ValueField="@(s =>  (s.countCases))" />
+                        <DxChartBarSeries Name="TotalRecovered" Filter="@((Covid19InfoDTO s) => s.countries == string.Join(",", selectedCountries.Select(x => x.Country)))"
+                                          ArgumentField="@(s => s.countries)" ValueField="@(s =>  (s.countRecover))" />
+                        <DxChartBarSeries Name="TotalDeaths" Filter="@((Covid19InfoDTO s) => s.countries == string.Join(",", selectedCountries.Select(x => x.Country)))"
+                                          ArgumentField="@(s => s.countries)" ValueField="@(s =>  (s.countDeaths))" />
+                    </DxChart>
+
+
+                    <br />
+
+                </div>
+            </div>
+
+
+            <br />
+            <br />
+
+
+
+        }
+        else
+        {
+            <div class="row" style="justify-content:center">
+                <div class="col-md-6">
+                    <br />
+                    <h1 style="color:aliceblue;" align="center"> @Status  </h1>
+                </div>
+            </div>
+        }
+
+    }
+}
+
+@code {
+
+
+    private Covid19InfoDTO SumValuesForChart = new Covid19InfoDTO();
+    private APIServices _service = new APIServices();
+    private Covid19InfoDTO covidModel = new Covid19InfoDTO();
+    private IEnumerable<Covid19InfoDTO> covidModelForChart = new List<Covid19InfoDTO>();
+    WorldWideInfoDTO worldWideInfoDTO = new WorldWideInfoDTO();
+    private DateTime DateTime { get; set; }
+
+    private bool isPopUp { get; set; } = false;
+    private bool isButtonClicked { get; set; } = false;
+    private string Status { get; set; } = "wait a second or refresh this page";
+
+
+    //private decimal countCases = 0, countDeaths = 0, countRecover = 0, countTotalDeaths = 0, countTotalCases = 0, countTotalRecover = 0;
+
+    private IEnumerable<Covid19InfoDTO> CovidResultData = new List<Covid19InfoDTO>();
+    IEnumerable<string> Tags { get; set; }
+    SizeMode SizeMode = SizeMode.Large;
+    DataGridFilteringMode filteringMode = DataGridFilteringMode.StartsWith;
+    DataGridFilteringMode FilteringMode { get => filteringMode; set { filteringMode = value; InvokeAsync(StateHasChanged); } }
+    IEnumerable<Covid19InfoDTO> selectedCountries = new List<Covid19InfoDTO>() { };
+    IEnumerable<Covid19InfoDTO> SelectedCountries
+    {
+        get => selectedCountries;
+        set { selectedCountries = value; InvokeAsync(StateHasChanged); }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            CovidResultData = await _service.CovidInfoData();
+            worldWideInfoDTO = await _service.AroundTheWorld();
+
+            //Tags = new List<string>() {"Turkey", "Azerbaijan" };
+            await Task.Delay(100);
+
+        }
+
+
+        catch (Exception)
+        {
+
+            CovidResultData = null;
+        }
+
+    }
+
+
+    private async Task ButtonClicked()
+    {
+        if (SelectedCountries.Count() != 0)
+        {
+            isPopUp = true;
+
+            SumValuesForChart.countries = string.Join(",", selectedCountries.Select(x => x.Country));
+            SumValuesForChart.countCases = selectedCountries.Sum(x => Convert.ToInt64(x.TodayCases));
+            SumValuesForChart.countDeaths = selectedCountries.Sum(y => Convert.ToInt64(y.TodayDeaths));
+            SumValuesForChart.countRecover = selectedCountries.Sum(z => Convert.ToInt64(z.TodayRecovered));
+
+            covidModel = CovidResultData.Select(s => new Covid19InfoDTO
+            {
+
+                TodayCases = SumValuesForChart.countCases.ToString(),
+                TodayDeaths = SumValuesForChart.countDeaths.ToString(),
+                TodayRecovered = SumValuesForChart.countRecover.ToString(),
+                
+            }).FirstOrDefault();
+
+            covidModelForChart = CovidResultData.Select(s => new Covid19InfoDTO
+            {
+                countries = SumValuesForChart.countries,
+                countCases = SumValuesForChart.countCases,
+                countRecover = SumValuesForChart.countRecover,
+                countDeaths = SumValuesForChart.countDeaths,
+              
+            }).ToList();
+
+            await Task.Delay(10);
+            if (covidModel == null)
+            {
+                Status = $"This keyword {covidModel.Country} not match with our record! Please try again.";
+            }
+
+        }
+
+        else
+        {
+            Status = "Please Enter Any Country Name";
+        }
+
+
+        isButtonClicked = true;
+
+    }
+}
