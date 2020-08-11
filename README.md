@@ -1,6 +1,6 @@
 ## Introduction: 
 
-A COVID19 Dashboard project developed with the Blazor WebAssembly architecture.
+A COVID19 Dashboard project developed with the Blazor WebAssembly framework.
 
 ## Features: 
 - Statistics updated daily
